@@ -1,0 +1,9 @@
+# --- LearnMate dependencies -------------------------------------------------
+# SDK-free: IBM Watsonx.ai is called directly via the REST API using the
+# standard `requests` library, so no ibm-watsonx-ai (and no pandas/numpy)
+# is required. Compatible with Python 3.8+, including 3.14.
+# ----------------------------------------------------------------------------
+
+Flask==3.1.3
+python-dotenv==1.0.1
+requests==2.32.3
