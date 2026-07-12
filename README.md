@@ -1,7 +1,7 @@
 # LearnMate 🎓 — AI Academic Coach
 
 > **AI-Powered Academic Coaching & Personalised Course Pathway**  
-> Built with **Python Flask** · **IBM Watsonx.ai** · **IBM Granite models**
+> Built with **Python Flask** · **IBM Watsonx.ai** · **Meta Llama 3**
 
 ---
 
@@ -9,7 +9,7 @@
 
 | Feature | Description |
 |---|---|
-| 💬 **AI Chat Coach** | Real-time academic coaching powered by IBM Granite via Watsonx.ai |
+| 💬 **AI Chat Coach** | Real-time academic coaching powered by Meta Llama 3 via Watsonx.ai |
 | 🗺️ **Curriculum Pathway** | AI-generated weekly study plans tailored to your goal & level |
 | 🎯 **Goal Tracker** | Add project goals, set deadlines, track progress with visual bars |
 | 📱 **Responsive UI** | Clean, modern purple/indigo theme — works on mobile, tablet & desktop |
@@ -88,7 +88,7 @@ IBM_WATSONX_URL=https://us-south.ml.cloud.ibm.com
 IBM_PROJECT_ID=your_project_id
 FLASK_SECRET_KEY=some-random-long-string
 FLASK_ENV=development
-WATSONX_MODEL_ID=ibm/granite-3-3-8b-instruct
+WATSONX_MODEL_ID=meta-llama/llama-3-3-70b-instruct
 ```
 
 > **How to find your credentials:**
@@ -179,7 +179,7 @@ how the Granite model behaves. It covers:
 |---|---|---|
 | Flask | 3.0.3 | Web framework |
 | python-dotenv | 1.0.1 | `.env` loader |
-| ibm-watsonx-ai | 1.1.2 | IBM Granite AI inference |
+| ibm-watsonx-ai | 1.1.2 | Meta Llama 3 AI inference |
 | gunicorn | 22.0.0 | WSGI server for production |
 
 ---
@@ -187,4 +187,4 @@ how the Granite model behaves. It covers:
 ## 📄 License
 
 MIT License — © 2024 LearnMate  
-IBM Watsonx.ai and IBM Granite are trademarks of IBM Corporation.
+IBM Watsonx.ai is a trademark of IBM Corporation.
