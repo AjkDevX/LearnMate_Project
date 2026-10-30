@@ -1,0 +1,155 @@
+{% extends "layout.html" %}
+{% block title %}AI Coach — LearnMate{% endblock %}
+
+{% block head_extra %}
+<!-- Marked.js for Markdown rendering (fallback) -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<!-- Highlight.js for code colouring (Atom One Dark theme) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="chat-page">
+
+  <!-- ── Sidebar ──────────────────────────────────────────────────── -->
+  <aside class="chat-sidebar" id="chatSidebar">
+    <div class="sidebar-header">
+      <h2 class="sidebar-title">LearnMate Coach</h2>
+      <span class="status-dot" id="statusDot" title="AI status"></span>
+    </div>
+
+    <div class="sidebar-section">
+      <p class="sidebar-label">Quick Prompts</p>
+      <div class="quick-prompts" id="quickPrompts">
+        <button class="qp-btn" data-prompt="Explain Python list comprehensions with examples.">🐍 Python Lists</button>
+        <button class="qp-btn" data-prompt="How do pointers work in C? Give a simple example.">⚙️ C Pointers</button>
+        <button class="qp-btn" data-prompt="Explain Java inheritance with a code example.">☕ Java OOP</button>
+        <button class="qp-btn" data-prompt="How do I start a data science project in Python?">📊 DS Workflow</button>
+        <button class="qp-btn" data-prompt="What is a linked list? Implement it in C.">🔗 Linked List</button>
+        <button class="qp-btn" data-prompt="Explain Scikit-learn's fit/transform/predict pipeline.">🤖 ML Pipeline</button>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <p class="sidebar-label">Learning Tracks</p>
+      <div class="track-pills">
+        <span class="track-pill pill-python">Python DS</span>
+        <span class="track-pill pill-java">Java</span>
+        <span class="track-pill pill-c">C Lang</span>
+      </div>
+    </div>
+
+    <div class="sidebar-section sidebar-actions">
+      <button class="btn btn-ghost btn-sm" id="clearChatBtn">🗑 Clear Chat</button>
+      <button type="button" class="btn btn-ghost btn-sm" onclick="window.print()" title="Export chat to PDF">🖨️ Export to PDF</button>
+      <a href="{{ url_for('pathway') }}" class="btn btn-ghost btn-sm">🗺️ My Pathway</a>
+    </div>
+  </aside>
+
+  <!-- ── Chat main area ───────────────────────────────────────────── -->
+  <div class="chat-main">
+
+    <!-- Top bar -->
+    <div class="chat-topbar">
+      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">☰</button>
+      <div class="chat-topbar-info">
+        <span class="topbar-title">AI Academic Coach</span>
+        <span class="topbar-sub">IBM Granite · Watsonx.ai</span>
+      </div>
+      <div class="chat-topbar-actions">
+        <button type="button" class="btn btn-outline btn-sm export-pdf-btn" id="exportPdfBtn" onclick="window.print()" title="Export conversation to PDF">
+          🖨️ Export to PDF
+        </button>
+      </div>
+      <div class="typing-indicator" id="typingIndicator">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+
+    <!-- Messages -->
+    <div class="chat-messages" id="chatMessages">
+      <!-- Welcome message -->
+      <div class="msg msg-ai">
+        <div class="msg-avatar">🎓</div>
+        <div class="msg-body">
+          <div class="msg-content">
+            <p>👋 Welcome to <strong>LearnMate</strong>! I'm your personal AI Academic Coach powered by IBM Granite.</p>
+            <p>I specialise in:</p>
+            <ul>
+              <li>🐍 <strong>Python Data Science</strong> — NumPy, Pandas, ML, Jupyter</li>
+              <li>☕ <strong>Java</strong> — OOP, Collections, Design Patterns</li>
+              <li>⚙️ <strong>C Programming</strong> — Pointers, Memory, Data Structures</li>
+            </ul>
+            <p>What would you like to learn today?</p>
+          </div>
+          <span class="msg-time">Now</span>
+        </div>
+      </div>
+
+      <!-- Previous history (server-rendered) -->
+      {% for msg in history %}
+        {% if msg.role == 'user' %}
+        <div class="msg msg-user">
+          <div class="msg-body msg-body-user">
+            <div class="msg-content">{{ msg.content }}</div>
+            <span class="msg-time">{{ msg.ts }}</span>
+          </div>
+          <div class="msg-avatar msg-avatar-user">👤</div>
+        </div>
+        {% else %}
+        <div class="msg msg-ai">
+          <div class="msg-avatar">🎓</div>
+          <div class="msg-body">
+            <div class="msg-content markdown-body">{{ msg.content | safe }}</div>
+            <span class="msg-time">{{ msg.ts }}</span>
+          </div>
+        </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <!-- Input area -->
+    <div class="chat-input-area">
+      <form id="chatForm" class="chat-input-form" onsubmit="event.preventDefault();">
+        <div class="chat-input-wrapper">
+          <button
+            type="button"
+            class="upload-syllabus-btn"
+            id="uploadSyllabusBtn"
+            disabled
+            title="Upload Syllabus for RAG context (Coming Soon in Beta)"
+          >
+            📄 Upload Syllabus (Beta)
+          </button>
+          <textarea
+            id="chatInput"
+            class="chat-input"
+            placeholder="Ask anything — concept, code review, career advice…"
+            rows="1"
+            maxlength="2000"
+          ></textarea>
+          <button type="submit" class="send-btn" id="sendBtn" aria-label="Send message">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Hidden loading spinner div below the submit button -->
+        <div id="loadingSpinner" class="chat-loading-spinner" style="display: none;">
+          <div class="spinner-ring"></div>
+          <span class="loading-text">LearnMate AI is thinking...</span>
+        </div>
+      </form>
+      <p class="input-hint">Press <kbd>Enter</kbd> to send &bull; <kbd>Shift+Enter</kbd> for new line &bull; Max 2 000 chars</p>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,112 @@
+{% extends "layout.html" %}
+{% block title %}Curriculum Pathway — LearnMate{% endblock %}
+
+{% block content %}
+<div class="page-wrapper">
+
+  <!-- ── Page header ────────────────────────────────────────────────── -->
+  <div class="page-header">
+    <h1 class="page-title">🗺️ Personalised Curriculum Pathway</h1>
+    <p class="page-sub">Tell LearnMate your goal — get a week-by-week AI-generated roadmap.</p>
+  </div>
+
+  <!-- ── Pathway builder form ──────────────────────────────────────── -->
+  <div class="pathway-layout">
+
+    <div class="pathway-form-panel panel">
+      <h2 class="panel-title">Build Your Pathway</h2>
+
+      <div class="form-group">
+        <label class="form-label" for="pathwayGoal">Your Learning Goal</label>
+        <textarea
+          id="pathwayGoal"
+          class="form-control"
+          placeholder="e.g. I want to become a data scientist who can build ML models from scratch."
+          rows="3"
+        ></textarea>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="pathwayTrack">Track</label>
+          <select id="pathwayTrack" class="form-control form-select">
+            <option value="Python Data Science">🐍 Python Data Science</option>
+            <option value="Java Development">☕ Java Development</option>
+            <option value="C Programming">⚙️ C Programming</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="pathwayLevel">Experience Level</label>
+          <select id="pathwayLevel" class="form-control form-select">
+            <option value="beginner">🌱 Beginner</option>
+            <option value="intermediate">⚡ Intermediate</option>
+            <option value="advanced">🚀 Advanced</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="btn btn-primary btn-full" id="generatePathwayBtn">
+        <span id="pathwayBtnText">✨ Generate My Pathway</span>
+        <span id="pathwayBtnSpinner" class="spinner" style="display:none;"></span>
+      </button>
+    </div>
+
+    <!-- ── Pathway output ─────────────────────────────────────────── -->
+    <div class="pathway-output-panel panel" id="pathwayOutput" style="display:none;">
+      <div class="pathway-output-header">
+        <h2 class="panel-title" id="pathwayOutputTitle">Your Learning Pathway</h2>
+        <div class="pathway-meta" id="pathwayMeta"></div>
+      </div>
+      <div class="pathway-content markdown-body" id="pathwayContent"></div>
+      <div class="pathway-actions">
+        <button class="btn btn-outline btn-sm" id="copyPathwayBtn">📋 Copy</button>
+        <a href="{{ url_for('goals') }}" class="btn btn-primary btn-sm">🎯 Add Goal →</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── Sample pathways ─────────────────────────────────────────── -->
+  <div class="section">
+    <h2 class="section-title" style="font-size:1.3rem;">Sample Pathway Templates</h2>
+    <div class="sample-pathways">
+
+      <div class="sample-card" data-goal="I want to learn Python for data analysis and visualisation from scratch." data-track="Python Data Science" data-level="beginner">
+        <div class="sample-icon">🌱</div>
+        <h3 class="sample-title">Python DS — Beginner</h3>
+        <p class="sample-desc">From zero to pandas & matplotlib in 6 weeks</p>
+        <button class="btn btn-ghost btn-sm sample-load-btn">Use Template</button>
+      </div>
+
+      <div class="sample-card" data-goal="I want to build and deploy a machine learning model." data-track="Python Data Science" data-level="intermediate">
+        <div class="sample-icon">🤖</div>
+        <h3 class="sample-title">ML Engineer — Intermediate</h3>
+        <p class="sample-desc">Scikit-learn, pipelines, and model deployment</p>
+        <button class="btn btn-ghost btn-sm sample-load-btn">Use Template</button>
+      </div>
+
+      <div class="sample-card" data-goal="I want to master Java OOP and build a REST API." data-track="Java Development" data-level="intermediate">
+        <div class="sample-icon">☕</div>
+        <h3 class="sample-title">Java Backend — Intermediate</h3>
+        <p class="sample-desc">OOP mastery, collections, and REST APIs</p>
+        <button class="btn btn-ghost btn-sm sample-load-btn">Use Template</button>
+      </div>
+
+      <div class="sample-card" data-goal="I want to understand pointers, memory management, and implement common data structures in C." data-track="C Programming" data-level="beginner">
+        <div class="sample-icon">⚙️</div>
+        <h3 class="sample-title">C Systems — Beginner</h3>
+        <p class="sample-desc">Pointers, structs, memory, and data structures</p>
+        <button class="btn btn-ghost btn-sm sample-load-btn">Use Template</button>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- Marked.js for Markdown rendering -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="{{ url_for('static', filename='js/pathway.js') }}"></script>
+{% endblock %}

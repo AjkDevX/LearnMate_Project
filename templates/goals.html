@@ -1,0 +1,114 @@
+{% extends "layout.html" %}
+{% block title %}Goal Tracker — LearnMate{% endblock %}
+
+{% block content %}
+<div class="page-wrapper">
+
+  <!-- ── Page header ─────────────────────────────────────────────── -->
+  <div class="page-header">
+    <h1 class="page-title">🎯 Project Goal Tracker</h1>
+    <p class="page-sub">Set milestones, track progress, and celebrate your wins.</p>
+  </div>
+
+  <!-- ── Stats row ───────────────────────────────────────────────── -->
+  <div class="goals-stats" id="goalsStats">
+    <div class="gstat-card">
+      <span class="gstat-num" id="statTotal">0</span>
+      <span class="gstat-lbl">Total Goals</span>
+    </div>
+    <div class="gstat-card">
+      <span class="gstat-num" id="statActive">0</span>
+      <span class="gstat-lbl">Active</span>
+    </div>
+    <div class="gstat-card gstat-card--green">
+      <span class="gstat-num" id="statDone">0</span>
+      <span class="gstat-lbl">Completed</span>
+    </div>
+    <div class="gstat-card">
+      <span class="gstat-num" id="statAvgPct">0%</span>
+      <span class="gstat-lbl">Avg Progress</span>
+    </div>
+  </div>
+
+  <!-- ── Add goal form ───────────────────────────────────────────── -->
+  <div class="panel goals-add-panel">
+    <h2 class="panel-title">Add New Goal</h2>
+    <div class="add-goal-form" id="addGoalForm">
+      <div class="form-group form-group--grow">
+        <label class="form-label" for="goalTitle">Goal / Project Title</label>
+        <input type="text" id="goalTitle" class="form-control" placeholder="e.g. Build a Pandas data pipeline" maxlength="120" />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="goalTrack">Track</label>
+        <select id="goalTrack" class="form-control form-select">
+          <option value="Python Data Science">🐍 Python DS</option>
+          <option value="Java Development">☕ Java</option>
+          <option value="C Programming">⚙️ C Lang</option>
+          <option value="General">📚 General</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="goalDeadline">Deadline</label>
+        <input type="date" id="goalDeadline" class="form-control" />
+      </div>
+      <button class="btn btn-primary" id="addGoalBtn">+ Add Goal</button>
+    </div>
+  </div>
+
+  <!-- ── Filter bar ─────────────────────────────────────────────── -->
+  <div class="goals-filter-bar">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="active">Active</button>
+    <button class="filter-btn" data-filter="completed">Completed</button>
+    <div class="filter-spacer"></div>
+    <input type="text" id="goalSearch" class="form-control goal-search" placeholder="🔍 Search goals…" />
+  </div>
+
+  <!-- ── Goals list ─────────────────────────────────────────────── -->
+  <div class="goals-list" id="goalsList">
+    <!-- Populated by goals.js -->
+    <div class="goals-empty" id="goalsEmpty">
+      <span class="empty-icon">🎯</span>
+      <p>No goals yet. Add your first goal above!</p>
+      <a href="{{ url_for('pathway') }}" class="btn btn-outline btn-sm">Generate a Pathway first →</a>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── Goal card template (hidden, cloned by JS) ───────────────────── -->
+<template id="goalCardTemplate">
+  <div class="goal-card" data-id="">
+    <div class="goal-card-header">
+      <div class="goal-card-info">
+        <span class="goal-track-badge"></span>
+        <h3 class="goal-title"></h3>
+        <span class="goal-deadline"></span>
+      </div>
+      <div class="goal-card-actions">
+        <button class="goal-action-btn complete-btn" title="Mark complete">✅</button>
+        <button class="goal-action-btn delete-btn" title="Delete goal">🗑️</button>
+      </div>
+    </div>
+    <div class="goal-progress-wrap">
+      <div class="progress-header">
+        <span class="progress-label">Progress</span>
+        <span class="progress-pct"></span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill"></div>
+      </div>
+      <input type="range" class="progress-slider" min="0" max="100" step="5" />
+    </div>
+    <div class="goal-status-row">
+      <span class="goal-status-chip"></span>
+      <span class="goal-created"></span>
+    </div>
+  </div>
+</template>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/goals.js') }}"></script>
+{% endblock %}
